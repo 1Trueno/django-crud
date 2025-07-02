@@ -1,0 +1,25 @@
+# Archivos y carpetas Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+*.pytest_cache/
+*.env
+.venv/
+venv/
+*.sqlite3
+
+# Django
+*.log
+*.pot
+*.pyc
+*.pyo
+db.sqlite3
+media/
+staticfiles/
+
+# IDEs y editores
+.vscode/
+.idea/
+
+# macOS
+.DS_Store
