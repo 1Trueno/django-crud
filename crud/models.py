@@ -1,13 +1,11 @@
 from django.db import models
 
 # Create your models here.
-class Cliente(models.Model):
-    id = models.AutoField(primary_key=True)
-    nombre = models.CharField(max_length=100)
-    correo = models.EmailField()
-    telefono = models.CharField(max_length=15)
-    direccion = models.CharField(max_length=200)
+class Empleado(models.Model):
+    NOMBRE = models.CharField(max_length=100)
+    apellido = models.CharField(max_length=100)
+    salario = models.DecimalField(max_digits=10, decimal_places=2)
+    email = models.EmailField()
 
     class Meta:
-        db_table = 'clientes'   # nombre real de la tabla en tu base
-        managed = False  
+        db_table = 'dbo.EMPLEADOS'  # o el nombre real exacto de tu tabla
