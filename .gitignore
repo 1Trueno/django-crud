@@ -23,3 +23,6 @@ staticfiles/
 
 # macOS
 .DS_Store
+
+#Archivos de entorno
+.env
