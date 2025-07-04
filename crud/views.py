@@ -17,4 +17,18 @@ class EmpleadosList(ListView):
 
 
 def home(request):
-    return render(request, 'home.html', {'empleados': Empleados.objects.all()})
+    nombre = request.GET.get('nombre', '')
+    apellido = request.GET.get('apellido', '')
+
+    empleados = Empleados.objects.all()
+
+    if nombre: 
+        empleados = empleados.filter(nombre__icontains=nombre)
+    if apellido:
+        empleados = empleados.filter(apellido__icontains=apellido)
+    
+    return render (request, 'home.html', {
+        'empleados': empleados,
+        'nombre': nombre,
+        'apellido': apellido
+    })

@@ -7,48 +7,68 @@
     {% load static %}
     <link rel="stylesheet" href="{% static 'output.css' %}" />
   </head>
-  <body class="bg-gray-100 min-h-screen flex items-center justify-center">
+  <body class="bg-gradient-to-l from-blue-400 to-green-100 min-h-screen flex items-center justify-center">
     <div class="bg-white p-8 rounded shadow-md text-center">
       <h1 class="text-3xl font-bold text-blue-600 mb-4">
         Consulta de Empleados
       </h1>
-      <div class="rounded text-center">
+
+      <!--Formulario de busqueda-->
+
+      <form method="get" class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
         <input
-        type="text"
-        placeholder="Nombre"
-        class="w-full p-2 border border-gray-300 rounded mb-4" style="height: 31.6px;"
+          type="text"
+          name="nombre"
+          value="{{ nombre }}"
+          placeholder="Nombre"
+          class="p-2 border border-gray-300 rounded w-full"
         />
         <input
-        type="text"
-        placeholder="Apellido"
-        class="w-full p-2 border border-gray-300 rounded mb-4" style="height: 31.6px;"
+          type="text"
+          name="apellido"
+          value="{{ apellido }}"
+          placeholder="Apellido"
+          class="p-2 border border-gray-300 rounded w-full"
         />
-      <button
-        class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-      >
-        Buscar
-      </button>
+        <div class="md:col-span-2 text-center">
+          <button
+            type="submit"
+            class="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 transition duration-200"
+          >
+            Buscar
+          </button>
+        </div>
+      </form>
+
+      <!--Tabla de resultados-->
+      <div class="overflow-x-auto">
+        <table class="min-w-full border border-gray-300 text-left">
+          <thead class="bg-blue-600 text-white">
+            <tr>
+              <th class="px-6 py-3 border-b">Nombre</th>
+              <th class="px-6 py-3 border-b">Apellido</th>
+              <th class="px-6 py-3 border-b">Salario</th>
+              <th class="px-6 py-3 border-b">Email</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for empleado in empleados %}
+            <tr class="hover:bg-gray-100">
+              <td class="px-6 py-3 border-b">{{ empleado.nombre }}</td>
+              <td class="px-6 py-3 border-b">{{ empleado.apellido }}</td>
+              <td class="px-6 py-3 border-b">{{ empleado.salario }}</td>
+              <td class="px-6 py-3 border-b">{{ empleado.email }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+              <td colspan="4" class="px-6 py-4 text-center text-gray-500">
+                No se encontraron Empleados.
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
       </div>
-  
-      <table class="min-w-full bg-white border border-gray-300">
-        <thead>
-          <tr>
-            <th class="px-4 py-2 border-b">Nombre</th>
-            <th class="px-4 py-2 border-b">Apellido</th>
-            <th class="px-4 py-2 border-b">Salario</th>
-            <th class="px-4 py-2 border-b">Email</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for empleado in empleados %}
-          <tr>
-            <td class="px-4 py-2 border-b">{{ empleado.nombre }}</td>
-            <td class="px-4 py-2 border-b">{{ empleado.apellido }}</td>
-            <td class="px-4 py-2 border-b">{{ empleado.salario }}</td>
-            <td class="px-4 py-2 border-b">{{ empleado.email }}</td>
-          </tr>
-          {% endfor %}
-        </tbody>
     </div>
   </body>
 </html>
