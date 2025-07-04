@@ -10,14 +10,45 @@
   <body class="bg-gray-100 min-h-screen flex items-center justify-center">
     <div class="bg-white p-8 rounded shadow-md text-center">
       <h1 class="text-3xl font-bold text-blue-600 mb-4">
-        Django CRUD Application
+        Consulta de Empleados
       </h1>
-      <p class="text-gray-700">¡Tailwind CSS está funcionando correctamente!</p>
+      <div class="rounded text-center">
+        <input
+        type="text"
+        placeholder="Nombre"
+        class="w-full p-2 border border-gray-300 rounded mb-4" style="height: 31.6px;"
+        />
+        <input
+        type="text"
+        placeholder="Apellido"
+        class="w-full p-2 border border-gray-300 rounded mb-4" style="height: 31.6px;"
+        />
       <button
-        class="mt-6 px-4 py-2 bg-blue-500 hover:bg-blue-700 text-white rounded"
+        class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
       >
-        Botón de prueba
+        Buscar
       </button>
+      </div>
+  
+      <table class="min-w-full bg-white border border-gray-300">
+        <thead>
+          <tr>
+            <th class="px-4 py-2 border-b">Nombre</th>
+            <th class="px-4 py-2 border-b">Apellido</th>
+            <th class="px-4 py-2 border-b">Salario</th>
+            <th class="px-4 py-2 border-b">Email</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for empleado in empleados %}
+          <tr>
+            <td class="px-4 py-2 border-b">{{ empleado.nombre }}</td>
+            <td class="px-4 py-2 border-b">{{ empleado.apellido }}</td>
+            <td class="px-4 py-2 border-b">{{ empleado.salario }}</td>
+            <td class="px-4 py-2 border-b">{{ empleado.email }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
     </div>
   </body>
 </html>
