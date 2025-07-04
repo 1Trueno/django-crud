@@ -24,5 +24,8 @@ staticfiles/
 # macOS
 .DS_Store
 
-#Datos de Base de datos
+#Archivos de entorno
 .env
+
+#node.js
+node_modules/

@@ -1,7 +1,20 @@
 from django.shortcuts import render
-from .models import Empleado
+from .models import Empleados
 
 # Create your views here.
-def index(request):
-    empleados = Empleado.objects.all()  # Trae todos los empleados
-    return render(request, 'index.html', {'empleados': empleados})
+from django.urls import reverse_lazy
+from django.views.generic import ListView, CreateView, UpdateView, DeleteView, DetailView
+from .models import Empleados
+from .forms import EmpleadosForm
+
+
+class EmpleadosList(ListView):
+    model = Empleados
+    template_name = 'crud/empleados_list.html'
+    context_object_name = 'empleados'
+
+    queryset = Empleados.objects.values('id_empleado', 'nombre', 'apellido','salario', 'email' ,)
+
+
+def home(request):
+    return render(request, 'home.html', {'empleados': Empleados.objects.all()})
