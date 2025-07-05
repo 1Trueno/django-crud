@@ -2,7 +2,7 @@
 @import "overlayscrollbars/css/OverlayScrollbars.min.css";
 
 .shiny-text {
-  background: linear-gradient(90deg, #ffffff, #c2bebe, #ffffff);
+  background: linear-gradient(90deg, #ffffff, #575656, #ffffff);
   background-size: 200% auto;
   background-clip: text;
   -webkit-background-clip: text;
