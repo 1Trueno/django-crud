@@ -414,7 +414,7 @@
 
 /* Efecto de brillo en el texto */
 .shiny-text {
-  background: linear-gradient(90deg, #ffffff, #575656, #ffffff);
+  background: linear-gradient(90deg, #ffffff, #817e7e, #ffffff);
   background-size: 200% auto;
   background-clip: text;
   -webkit-background-clip: text;
