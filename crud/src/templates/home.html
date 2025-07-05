@@ -1,3 +1,4 @@
+{% load humanize %}
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -37,6 +38,12 @@
           >
             Buscar
           </button>
+          <a
+            href="."
+            class="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 transition duration-200"
+          >
+            Volver a cargar todos
+          </a>
         </div>
       </form>
 
@@ -56,7 +63,7 @@
             <tr class="hover:bg-gray-100">
               <td class="px-6 py-3 border-b">{{ empleado.nombre }}</td>
               <td class="px-6 py-3 border-b">{{ empleado.apellido }}</td>
-              <td class="px-6 py-3 border-b">{{ empleado.salario }}</td>
+              <td class="px-6 py-3 border-b">RD {{ empleado.salario|intcomma }}</td>
               <td class="px-6 py-3 border-b">{{ empleado.email }}</td>
             </tr>
             {% empty %}
