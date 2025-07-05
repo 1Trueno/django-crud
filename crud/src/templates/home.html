@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="{% static 'output.css' %}" />
   </head>
   <body class="bg-gradient-to-l from-blue-400 to-green-100 min-h-screen flex items-center justify-center">
-    <div class="bg-white p-8 rounded shadow-md text-center">
+    <div class="bg-white p-8 rounded shadow-md text-center mt-7">
       <h1 class="text-3xl font-bold text-blue-600 mb-4">
         Consulta de Empleados
       </h1>
@@ -41,9 +41,9 @@
       </form>
 
       <!--Tabla de resultados-->
-      <div class="overflow-x-auto">
+      <div class="overflow-y-auto max-h-custom shadow-md ">
         <table class="min-w-full border border-gray-300 text-left">
-          <thead class="bg-blue-600 text-white">
+          <thead class="bg-blue-600 text-white sticky-top-0">
             <tr>
               <th class="px-6 py-3 border-b">Nombre</th>
               <th class="px-6 py-3 border-b">Apellido</th>
