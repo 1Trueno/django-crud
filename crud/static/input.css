@@ -1,1 +1,28 @@
 @import "tailwindcss";
+@import "overlayscrollbars/css/OverlayScrollbars.min.css";
+
+.shiny-text {
+  background: linear-gradient(90deg, #ffffff, #c2bebe, #ffffff);
+  background-size: 200% auto;
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  animation: shine 2s linear infinite;
+}
+
+@keyframes shine {
+  to {
+    background-position: -200% center;
+  }
+}
+
+.os-scrollbar {
+  --os-track-bg: #ebf8ff;
+  --os-thumb-bg: #60a5fa;
+  --os-thumb-bg-hover: #3b82f6;
+}
+
+.os-scrollbar-vertical > .os-scrollbar-track > .os-scrollbar-handle {
+  border-radius: 9999px;
+}
