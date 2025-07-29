@@ -1,10 +1,9 @@
 from django.shortcuts import render
-from .models import Empleados
 
 # Create your views here.
 from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView, DetailView
-from .models import Empleados
+from .models import Empleados,Puestos,Departamentos
 from .forms import EmpleadosForm
 
 
@@ -21,14 +20,17 @@ def home(request):
     apellido = request.GET.get('apellido', '')
 
     empleados = Empleados.objects.all()
-
+    
+    #David: Hace que Django obtenga los datos del puesto y departamento de cada empleado en una sola consulta a la base de datos
+    empleados = Empleados.objects.select_related('id_puesto','id_departamento').all()
+    
     if nombre: 
         empleados = empleados.filter(nombre__icontains=nombre)
     if apellido:
         empleados = empleados.filter(apellido__icontains=apellido)
     
-    return render (request, 'home.html', {
+    return render(request, 'home.html', {
         'empleados': empleados,
         'nombre': nombre,
-        'apellido': apellido
+        'apellido': apellido,
     })

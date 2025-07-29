@@ -1,3 +1,14 @@
 @import "tailwindcss";
 @import "overlayscrollbars/css/OverlayScrollbars.min.css";
 
+
+
+.os-scrollbar {
+  --os-track-bg: #ebf8ff;
+  --os-thumb-bg: #60a5fa;
+  --os-thumb-bg-hover: #3b82f6;
+}
+
+.os-scrollbar-vertical > .os-scrollbar-track > .os-scrollbar-handle {
+  border-radius: 9999px;
+}
