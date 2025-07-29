@@ -19,11 +19,9 @@ def home(request):
     nombre = request.GET.get('nombre', '')
     apellido = request.GET.get('apellido', '')
 
-    empleados = Empleados.objects.all()
-    
     #David: Hace que Django obtenga los datos del puesto y departamento de cada empleado en una sola consulta a la base de datos
     empleados = Empleados.objects.select_related('id_puesto','id_departamento').all()
-    
+
     if nombre: 
         empleados = empleados.filter(nombre__icontains=nombre)
     if apellido:
@@ -33,4 +31,24 @@ def home(request):
         'empleados': empleados,
         'nombre': nombre,
         'apellido': apellido,
+        
     })
+
+# Aqui se veran las funciones del CRUD de empleados
+
+class EmpleadosCreate(CreateView):
+    model = Empleados
+    form_class = EmpleadosForm
+    template_name = 'crud/empleados_form.html'
+    success_url = reverse_lazy('home')
+
+class EmpleadosUpdate(UpdateView):
+    model = Empleados
+    form_class = EmpleadosForm
+    template_name = 'crud/empleados_form.html'
+    success_url = reverse_lazy('home')
+
+class EmpleadosDelete(DeleteView):
+    model = Empleados
+    template_name = 'crud/empleados_confirm_delete.html'
+    success_url = reverse_lazy('home')

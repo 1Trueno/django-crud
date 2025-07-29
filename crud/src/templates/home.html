@@ -1,115 +1,254 @@
-{% load humanize %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Home</title>
-    <link rel="icon" href="https://img.icons8.com/ios-filled/50/007BFF/home.png" type="image/png">
-    {% load static %}
-    <link rel="stylesheet" href="{% static 'output.css' %}" />
-
+    <title>Gestión de Empleados</title>
+    <script src="https://cdn.tailwindcss.com"></script>
   </head>
-  <body
-    class="bg-gradient-to-l from-blue-400 to-green-100 min-h-screen flex items-center justify-center"
-  >      
-    <div class="bg-white pr-8 pl-8 pt-8 rounded shadow-md text-center mt-2 ">
-      <h1 class="text-3xl font-bold text-blue-600 mb-4">
-        Consulta de Empleados
-      </h1>
+  <body class="bg-gray-100 text-gray-900">
+    <div class="container mx-auto px-4 py-8">
+      <div class="flex justify-between items-center mb-6">
+        <h1 class="text-3xl font-bold">Lista de Empleados</h1>
+        <button
+          onclick="openModal('modal-create')"
+          class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded"
+        >
+          Crear empleado
+        </button>
+      </div>
 
-      <!--Formulario de busqueda-->
-
-      <form method="get" class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-        <input
-          type="text"
-          name="nombre"
-          value="{{ nombre }}"
-          placeholder="Nombre"
-          class="p-2 border border-gray-300 rounded w-full"
-        />
-        <input
-          type="text"
-          name="apellido"
-          value="{{ apellido }}"
-          placeholder="Apellido"
-          class="p-2 border border-gray-300 rounded w-full"
-        />
-        <div class="md:col-span-2 text-center">
-          <button
-            type="submit"
-            class="bg-blue-600 px-6 py-2 rounded hover:bg-blue-700 transform hover:scale-105 transition duration-300 mr-[140px]"
-          >
-            <span class="shiny-text"> Buscar</span>
-          </button>
-
-          <button
-            type="button"
-            onclick="window.location.href='.'"
-            class="bg-blue-600 px-6 py-2 rounded hover:bg-blue-700 transform hover:scale-105 transition duration-300"
-          >
-            <span class="shiny-text"> Volver a cargar todos</span>
-          </button>
-        </div>
-      </form>
-
-      <!--Tabla de resultados-->
-      <div class="shadow-md custom-scroll rounded-lg mb-4">
-        <table class="min-w-full border border-gray-300 text-left">
-          <thead>
+      <!-- Tabla -->
+      <div class="overflow-x-auto bg-white rounded shadow">
+        <table class="min-w-full text-sm text-left">
+          <thead class="bg-gray-200 text-gray-700">
             <tr>
-              <th class="px-2 py-3 border-b bg-blue-600 text-white sticky top-0 z-10">
-                Nombre
-              </th>
-              <th class="px-2 py-3 border-b bg-blue-600 text-white sticky top-0 z-10">
-                Apellido
-              </th>
-              <th class="px-2 py-3 border-b bg-blue-600 text-white sticky top-0 z-10">
-                Salario
-              </th>
-              <th class="px-2 py-3 border-b bg-blue-600 text-white sticky top-0 z-10">
-                Email
-              </th>
-              <th class="px-2 py-3 border-b bg-blue-600 text-white sticky top-0 z-10">
-                Puesto
-              </th>
-              <th class="px-2 py-3 border-b bg-blue-600 text-white sticky top-0 z-10">
-                Departamento
-              </th>              
+              <th class="py-3 px-4">Nombre</th>
+              <th class="py-3 px-4">Apellido</th>
+              <th class="py-3 px-4">Salario</th>
+              <th class="py-3 px-4">Email</th>
+              <th class="py-3 px-4">Puesto</th>
+              <th class="py-3 px-4">Departamento</th>
+              <th class="py-3 px-4 text-center">Acciones</th>
             </tr>
           </thead>
           <tbody>
             {% for empleado in empleados %}
-            <tr class="hover:bg-gray-100">
-              <td class="px-2 py-3 border-b">{{ empleado.nombre }}</td>
-              <td class="px-2 py-3 border-b">{{ empleado.apellido }}</td>
-              <td class="px-2 py-3 border-b">
-                RD {{ empleado.salario|intcomma }}
+            <tr class="border-t border-gray-200 hover:bg-gray-50">
+              <td class="py-2 px-4">{{ empleado.nombre }}</td>
+              <td class="py-2 px-4">{{ empleado.apellido }}</td>
+              <td class="py-2 px-4">{{ empleado.salario }}</td>
+              <td class="py-2 px-4">{{ empleado.email }}</td>
+              <td class="py-2 px-4">{{ empleado.id_puesto.titulo_puesto }}</td>
+              <td class="py-2 px-4">
+                {{ empleado.id_departamento.nombre_departamento }}
               </td>
-              <td class="px-2 py-3 border-b">{{ empleado.email }}</td>
-              <td class="px-2 py-3 border-b">{{ empleado.id_puesto.titulo_puesto }}</td>       
-              <td class="px-2 py-3 border-b">{{ empleado.id_departamento.nombre_departamento }}</td>       
+              <td class="py-2 px-4 text-center space-x-2">
+                <button
+                  onclick="openModal('modal-update-{{ empleado.id }}')"
+                  class="bg-yellow-400 hover:bg-yellow-500 text-white px-2 py-1 rounded"
+                >
+                  Editar
+                </button>
+                <button
+                  onclick="openModal('modal-delete-{{ empleado.id }}')"
+                  class="bg-red-500 hover:bg-red-600 text-white px-2 py-1 rounded"
+                >
+                  Eliminar
+                </button>
+              </td>
+            </tr>
 
-            </tr>
-            {% empty %}
-            <tr>
-              <td colspan="4" class="px-6 py-4 text-center text-gray-500">
-                No se encontraron Empleados.
-              </td>
-            </tr>
+            <!-- Modal de editar -->
+            <div
+              id="modal-update-{{ empleado.id }}"
+              class="fixed inset-0 bg-black bg-opacity-40 hidden justify-center items-center z-50"
+            >
+              <div class="bg-white p-6 rounded-lg w-full max-w-md">
+                <h2 class="text-xl font-semibold mb-4">Editar Empleado</h2>
+                <form
+                  action="{% url 'empleados_update' empleado.id_empleado %}"
+                  method="POST"
+                >
+                  {% csrf_token %}
+                  <input
+                    type="text"
+                    name="nombre"
+                    value="{{ empleado.nombre }}"
+                    class="w-full border border-gray-300 rounded px-3 py-2 mb-2"
+                    required
+                  />
+                  <input
+                    type="text"
+                    name="apellido"
+                    value="{{ empleado.apellido }}"
+                    class="w-full border border-gray-300 rounded px-3 py-2 mb-2"
+                    required
+                  />
+                  <input
+                    type="number"
+                    name="salario"
+                    value="{{ empleado.salario }}"
+                    class="w-full border border-gray-300 rounded px-3 py-2 mb-2"
+                    required
+                  />
+                  <input
+                    type="text"
+                    name="email"
+                    value="{{ empleado.email }}"
+                    class="w-full border border-gray-300 rounded px-3 py-2 mb-2"
+                    required
+                  />
+                  <input
+                    type="text"
+                    name="puesto"
+                    value="{{ empleado.id_puesto.titulo_puesto }}"
+                    class="w-full border border-gray-300 rounded px-3 py-2 mb-2"
+                    required
+                  />
+                  <input
+                    type="text"
+                    name="departamento"
+                    value="{{ empleado.id_departamento.nombre_departamento }}"
+                    class="w-full border border-gray-300 rounded px-3 py-2 mb-4"
+                    required
+                  />
+                  <div class="flex justify-end gap-2">
+                    <button
+                      type="button"
+                      onclick="closeModal('modal-update-{{ empleado.id }}')"
+                      class="px-4 py-2 rounded bg-gray-300"
+                    >
+                      Cancelar
+                    </button>
+                    <button
+                      type="submit"
+                      class="px-4 py-2 rounded bg-blue-600 text-white"
+                    >
+                      Guardar
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+
+            <!-- Modal de eliminar -->
+            <div
+              id="modal-delete-{{ empleado.id }}"
+              class="fixed inset-0 bg-black bg-opacity-40 hidden justify-center items-center z-50"
+            >
+              <div class="bg-white p-6 rounded-lg w-full max-w-md">
+                <h2 class="text-xl font-semibold mb-4">¿Eliminar empleado?</h2>
+                <p>
+                  ¿Estás seguro de que deseas eliminar a
+                  <strong>{{ empleado.nombre }}</strong>?
+                </p>
+                <div class="flex justify-end mt-6 gap-2">
+                  <button
+                    onclick="closeModal('modal-delete-{{ empleado.id }}')"
+                    class="px-4 py-2 rounded bg-gray-300"
+                  >
+                    Cancelar
+                  </button>
+                  <form
+                    action="{% url 'empleados_delete' empleado.id_empleado %}"
+                    method="POST"
+                  >
+                    {% csrf_token %}
+                    <button
+                      type="submit"
+                      class="px-4 py-2 rounded bg-red-600 text-white"
+                    >
+                      Eliminar
+                    </button>
+                  </form>
+                </div>
+              </div>
+            </div>
             {% endfor %}
           </tbody>
         </table>
       </div>
     </div>
+
+    <!-- Modal de crear -->
+    <div
+      id="modal-create"
+      class="fixed inset-0 bg-black bg-opacity-40 hidden justify-center items-center z-50"
+    >
+      <div class="bg-white p-6 rounded-lg w-full max-w-md">
+        <h2 class="text-xl font-semibold mb-4">Crear nuevo empleado</h2>
+        <form action="{% url 'empleados_create' %}" method="POST">
+          {% csrf_token %}
+          <input
+            type="text"
+            name="nombre"
+            placeholder="Nombre"
+            class="w-full border border-gray-300 rounded px-3 py-2 mb-2"
+            required
+          />
+          <input
+            type="text"
+            name="apellido"
+            placeholder="Apellido"
+            class="w-full border border-gray-300 rounded px-3 py-2 mb-2"
+            required
+          />
+          <input
+            type="number"
+            name="salario"
+            placeholder="Salario"
+            class="w-full border border-gray-300 rounded px-3 py-2 mb-2"
+            required
+          />
+          <input
+            type="text"
+            name="email"
+            placeholder="Email"
+            class="w-full border border-gray-300 rounded px-3 py-2 mb-2"
+            required
+          />
+          <input
+            type="text"
+            name="puesto"
+            placeholder="Puesto"
+            class="w-full border border-gray-300 rounded px-3 py-2 mb-2"
+            required
+          />
+          <input
+            type="text"
+            name="departamento"
+            placeholder="Departamento"
+            class="w-full border border-gray-300 rounded px-3 py-2 mb-4"
+            required
+          />
+          <div class="flex justify-end gap-2">
+            <button
+              type="button"
+              onclick="closeModal('modal-create')"
+              class="px-4 py-2 rounded bg-gray-300"
+            >
+              Cancelar
+            </button>
+            <button
+              type="submit"
+              class="px-4 py-2 rounded bg-blue-600 text-white"
+            >
+              Crear
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
     <script>
-      // Si hay parámetros en la URL, los quitamos después de cargar la página
-      if (window.location.search) {
-        window.history.replaceState(
-          {},
-          document.title,
-          window.location.pathname
-        );
+      function openModal(id) {
+        document.getElementById(id).classList.remove("hidden");
+        document.getElementById(id).classList.add("flex");
+      }
+      function closeModal(id) {
+        document.getElementById(id).classList.remove("flex");
+        document.getElementById(id).classList.add("hidden");
       }
     </script>
   </body>
