@@ -11,7 +11,7 @@ class Puestos(models.Model):
         managed = False
         db_table = 'PUESTOS'
 
-#Clase Puestos que trae los parametros de la tabla PUESTOS
+#Clase Departamentos que trae los parametros de la tabla DEPARTAMENTOS
 class Departamentos(models.Model):
     id_departamento = models.CharField(db_column='ID_DEPARTAMENTO', primary_key=True, max_length=10)
     nombre_departamento = models.CharField(db_column='NOMBRE_DEPARTAMENTO', max_length=35, blank=True, null=True)

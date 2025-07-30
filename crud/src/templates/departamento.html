@@ -83,13 +83,9 @@
                     <h2 class="text-xl font-semibold mb-4">Editar Empleado</h2>
                     <form action="{% url 'departamento_update' departamento.id_departamento %}" method="POST">
                         {% csrf_token %}
+                        <label class="block text-blue-400 text-sm mb-1">Precio KG (RD$):</label>
                         <input type="text" name="nombre_departamento" value="{{ departamento.nombre_departamento }}"
                             class="w-full border border-gray-300 rounded px-3 py-2 mb-2" required />
-                        <!--                        <input type="number" name="id_supervisor" value="{{ departamento.id_supervisor }}"
-                            class="w-full border border-gray-300 rounded px-3 py-2 mb-2" required />
-                        <input type="number" name="id_locacion" value="{{ departamento.id_locacion }}"
-                            class="w-full border border-gray-300 rounded px-3 py-2 mb-2" required />
--->
                         <select name="id_supervisor" class="w-full border border-gray-300 rounded px-3 py-2 mb-4">
                             <option value="">{{ departamento.id_supervisor }}</option>
                             {% for departamento in departamentos %}

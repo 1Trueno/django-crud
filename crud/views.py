@@ -12,13 +12,13 @@ class EmpleadosList(ListView):
     template_name = 'crud/empleados_list.html'
     context_object_name = 'empleados'
 
-    queryset = Empleados.objects.values('id_empleado', 'nombre', 'apellido','salario', 'email' ,)
+    queryset = Empleados.objects.values('id_empleado', 'nombre', 'apellido','salario', 'email',)
 
 def home(request):
     nombre = request.GET.get('nombre', '')
     apellido = request.GET.get('apellido', '')
 
-    #David: Hace que Django obtenga los datos del puesto y departamento de cada empleado en una sola consulta a la base de datos
+    # David: Hace que Django obtenga los datos del puesto y departamento de cada empleado en una sola consulta a la base de datos
     empleados = Empleados.objects.select_related('id_puesto','id_departamento').all()
 
     if nombre: 
@@ -26,11 +26,16 @@ def home(request):
     if apellido:
         empleados = empleados.filter(apellido__icontains=apellido)
     
+    # AGREGAR ESTAS LÍNEAS PARA OBTENER TODOS LOS DEPARTAMENTOS Y PUESTOS
+    departamentos = Departamentos.objects.all()
+    puestos = Puestos.objects.all()
+    
     return render(request, 'home.html', {
         'empleados': empleados,
+        'departamentos': departamentos,  # NUEVO - para los selects
+        'puestos': puestos,  # NUEVO - para los selects  
         'nombre': nombre,
         'apellido': apellido,
-        
     })
 
 # Aqui se veran las funciones del CRUD de empleados
@@ -60,7 +65,7 @@ class DepartamentoList(ListView):
 
     queryset = Departamentos.objects.values('id_departamento', 'nombre_departamento', 'id_supervisor', 'id_locacion' ,)
 
-def dep(request):
+def departamento_home(request):
     nombre_dep = request.GET.get('nombre_dep')
     
     departamentos = Departamentos.objects.all()

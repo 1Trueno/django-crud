@@ -106,17 +106,18 @@
                 <input type="text" name="email" value="{{ empleado.email }}"
                   class="w-full border border-gray-300 rounded px-3 py-2 mb-2" required />
 
-                <select name="puesto" class="w-full border border-gray-300 rounded px-3 py-2 mb-4">
+                <select name="id_puesto" class="w-full border border-gray-300 rounded px-3 py-2 mb-4">
                   <option value="">{{ empleado.id_puesto.titulo_puesto }}</option>
-                  {% for empleado in empleados %}
-                  <option value="{{ empleado.id_empleado }}">{{ empleado.id_puesto.titulo_puesto }}</option>
+                  {% for puesto in puestos %}
+                  <option value="{{ puesto.id_puesto }}">{{ puesto.titulo_puesto }}</option>
                   {% endfor %}
                 </select>
 
-                <select name="departamento" class="w-full border border-gray-300 rounded px-3 py-2 mb-4">
+                <select name="id_departamento" class="w-full border border-gray-300 rounded px-3 py-2 mb-4" required>
                   <option value="">{{ empleado.id_departamento.nombre_departamento }}</option>
-                  {% for empleado in empleados %}
-                  <option value="{{ empleado.id_empleado }}">{{ empleado.id_departamento.nombre_departamento }}
+                  {% for departamento in departamentos %}
+                  <option value="{{ departamento.id_departamento }}">
+                    {{ departamento.nombre_departamento }}
                   </option>
                   {% endfor %}
                 </select>
