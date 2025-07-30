@@ -4,13 +4,29 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Gestión de Empleados</title>
+  {%block title%} <title>Gestión de Empleados</title> {% endblock %}
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
-<body class="bg-gray-100 text-gray-900">
-  <div class="container mx-auto px-4 py-8">
-        <form method="get" class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+<body class="bg-gray-100 text-gray-900 min-h-screen">
+  {% block navlink_content %}
+  <nav id="simpleNavbar"
+    class="fixed top-0 left-0 w-full z-50 bg-white border-b-4 border-gray-700 transition-transform duration-500 ease-in-out transform translate-y-0">
+    <div class="max-w-full mx-auto flex">
+      <a href="{% url 'home' %}"
+        class="flex-1 text-center rounded-xs bg-blue-700 hover:bg-blue-400 text-white px-4 py-2">
+        Empleados
+      </a>
+      <a href="{% url 'departamentos' %}" class="flex-1 text-center bg-blue-500 hover:bg-blue-400 text-white px-4 py-2">
+        Departamento
+      </a>
+    </div>
+  </nav>
+  {% endblock %}
+
+  <div class=" container mx-auto mt-6 px-4 py-8">
+    {%block search %}
+    <form method="get" class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6 w-full">
       <input type="text" name="nombre" value="{{ nombre }}" placeholder="Nombre"
         class="p-2 border border-gray-300 rounded w-full" />
       <input type="text" name="apellido" value="{{ apellido }}" placeholder="Apellido"
@@ -18,8 +34,7 @@
 
       <!--Botones del formulario-->
       <div class="md:col-span-2 text-center">
-        <button type="submit"
-          class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded">
+        <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded">
           <span class="shiny-text"> Buscar</span>
         </button>
         <button type="button" onclick="window.location.href='.'"
@@ -28,6 +43,9 @@
         </button>
       </div>
     </form>
+    {% endblock %}
+
+    {% block departament %}
     <div class="flex justify-between items-center mb-6">
       <h1 class="text-3xl font-bold">Lista de Empleados</h1>
       <button onclick="openModal('modal-create')" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded">
@@ -87,8 +105,8 @@
                   class="w-full border border-gray-300 rounded px-3 py-2 mb-2" required />
                 <input type="text" name="email" value="{{ empleado.email }}"
                   class="w-full border border-gray-300 rounded px-3 py-2 mb-2" required />
-                
-                  <select name="puesto" class="w-full border border-gray-300 rounded px-3 py-2 mb-4">
+
+                <select name="puesto" class="w-full border border-gray-300 rounded px-3 py-2 mb-4">
                   <option value="">{{ empleado.id_puesto.titulo_puesto }}</option>
                   {% for empleado in empleados %}
                   <option value="{{ empleado.id_empleado }}">{{ empleado.id_puesto.titulo_puesto }}</option>
@@ -98,7 +116,8 @@
                 <select name="departamento" class="w-full border border-gray-300 rounded px-3 py-2 mb-4">
                   <option value="">{{ empleado.id_departamento.nombre_departamento }}</option>
                   {% for empleado in empleados %}
-                  <option value="{{ empleado.id_empleado }}">{{ empleado.id_departamento.nombre_departamento }}</option>
+                  <option value="{{ empleado.id_empleado }}">{{ empleado.id_departamento.nombre_departamento }}
+                  </option>
                   {% endfor %}
                 </select>
 
@@ -172,6 +191,7 @@
       </form>
     </div>
   </div>
+  {% endblock %}
 
   <script>
     function openModal(id) {
@@ -182,6 +202,24 @@
       document.getElementById(id).classList.remove("flex");
       document.getElementById(id).classList.add("hidden");
     }
+
+    //navbar
+    const navbar = document.getElementById('simpleNavbar');
+    let lastScrollTop = 0;
+
+    window.addEventListener('scroll', () => {
+      const currentScroll = window.scrollY;
+
+      if (currentScroll > lastScrollTop && currentScroll > 70) {
+        // Oculta la navbar al bajar
+        navbar.classList.add('-translate-y-full');
+      } else {
+        // Muestra la navbar al subir
+        navbar.classList.remove('-translate-y-full');
+      }
+
+      lastScrollTop = currentScroll;
+    });
   </script>
 </body>
 

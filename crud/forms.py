@@ -1,5 +1,5 @@
 from django import forms
-from .models import Empleados
+from .models import Empleados, Departamentos
 
 
 class EmpleadosForm(forms.ModelForm):
@@ -21,3 +21,13 @@ class EmpleadosForm(forms.ModelForm):
         widgets = {
             'salario': forms.NumberInput(attrs={'min': 0})
         }
+
+class DepartamentosForm(forms.ModelForm):
+    class Meta:
+        model = Departamentos
+        fields = [
+            'id_departamento',
+            'nombre_departamento',
+            'id_supervisor',
+            'id_locacion',
+        ]
