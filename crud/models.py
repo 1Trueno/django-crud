@@ -8,7 +8,8 @@ class Puestos(models.Model):
     salario_maximo = models.IntegerField(db_column='SALARIO_MAXIMO', blank=True, null=True)
 
     class Meta:
-        managed = False
+        # Unica forma de que django nos deje trabajar con la base de datos (Anderson)  false ---> True
+        managed = True
         db_table = 'PUESTOS'
 
 #Clase Departamentos que trae los parametros de la tabla DEPARTAMENTOS
@@ -18,8 +19,10 @@ class Departamentos(models.Model):
     id_supervisor = models.IntegerField(db_column='ID_SUPERVISOR', blank=True, null=True)
     id_locacion = models.IntegerField(db_column='ID_LOCACION', blank=True, null=True)
 
+
     class Meta:
-        managed = False
+    # Unica forma de que django nos deje trabajar con la base de datos (Anderson) false ---> True
+        managed = True
         db_table = 'DEPARTAMENTOS'
 
 class Empleados(models.Model):
@@ -36,6 +39,7 @@ class Empleados(models.Model):
     id_departamento = models.ForeignKey(Departamentos,db_column='ID_DEPARTAMENTO', on_delete=models.DO_NOTHING, blank=True, null=True)  # Field name made lowercase.
 
     class Meta:
-        managed = False
+        # Unica forma de que django nos deje trabajar con la base de datos (Anderson) false ---> True
+        managed = True
         db_table = 'EMPLEADOS'
 

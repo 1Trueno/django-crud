@@ -5,6 +5,8 @@ from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView, DetailView
 from .models import Empleados,Puestos,Departamentos
 from .forms import EmpleadosForm,DepartamentosForm
+from django.shortcuts import redirect
+from django.http import JsonResponse
 
 
 class EmpleadosList(ListView):
@@ -40,21 +42,25 @@ def home(request):
 
 # Aqui se veran las funciones del CRUD de empleados
 
-class EmpleadosCreate(CreateView):
-    model = Empleados
-    form_class = EmpleadosForm
-    template_name = 'crud/empleados_form.html'
-    success_url = reverse_lazy('home')
 
 class EmpleadosUpdate(UpdateView):
     model = Empleados
     form_class = EmpleadosForm
-    template_name = 'crud/empleados_form.html'
     success_url = reverse_lazy('home')
+    
+
+    def form_valid(self, form):
+        form.save()
+        return redirect(self.success_url)
+    
+
+    def form_invalid (self,form):
+        print ("Errores del formulario:", form.errors)
+        return redirect(self.success_url)
+    
 
 class EmpleadosDelete(DeleteView):
     model = Empleados
-    template_name = 'crud/empleados_confirm_delete.html'
     success_url = reverse_lazy('home')
     
 #Departamento
@@ -78,19 +84,26 @@ def departamento_home(request):
         'nombre_dep': nombre_dep,
     })
 
-class DepartamentosCreate(CreateView):
-    model = Departamentos
-    form_class = DepartamentosForm
-    template_name = 'crud/departamentos_form.html'
-    success_url = reverse_lazy('departamento')
+#crear empleado
+
+def crear_empleado (request):
+    if request.method == 'POST':
+        form = EmpleadosForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('home')
+        else:
+            print(form.errors)
+    return redirect('home')
+
 
 class DepartamentosUpdate(UpdateView):
     model = Departamentos
     form_class = DepartamentosForm
     template_name = 'crud/departamentos_form.html'
-    success_url = reverse_lazy('departamento')
+    success_url = reverse_lazy('home')  
 
 class DepartamentosDelete(DeleteView):
     model = Departamentos
     template_name = 'crud/departamentos_confirm_delete.html'
-    success_url = reverse_lazy('departamento')
+    success_url = reverse_lazy('home')  # Cambia aquí
