@@ -12,18 +12,35 @@ class Puestos(models.Model):
         managed = True
         db_table = 'PUESTOS'
 
+#Clase Locaciones que trae los parametros de la tabla LOCACIONES
+class Locaciones(models.Model):
+    id_locacion = models.CharField(db_column='ID_LOCACION', primary_key=True, max_length=10)
+    direccion = models.CharField(db_column='DIRECCION', max_length=40, blank=True, null=True)
+    codigo = models.CharField(db_column='CODIGO_POSTAL', max_length=12, blank=True, null=True)
+    ciudad = models.CharField(db_column='CIUDAD', max_length=30, blank=True, null=True)
+    provincia = models.CharField(db_column='PROVINCIA', max_length=25, blank=True, null=True)
+    id_pais = models.CharField(db_column='ID_PAIS', max_length=2, blank=True, null=True)
+    
+
+
+    class Meta:
+    # Unica forma de que django nos deje trabajar con la base de datos (Anderson) false ---> True
+        managed = False
+        db_table = 'LOCACIONES'
+
 #Clase Departamentos que trae los parametros de la tabla DEPARTAMENTOS
 class Departamentos(models.Model):
     id_departamento = models.CharField(db_column='ID_DEPARTAMENTO', primary_key=True, max_length=10)
     nombre_departamento = models.CharField(db_column='NOMBRE_DEPARTAMENTO', max_length=35, blank=True, null=True)
     id_supervisor = models.IntegerField(db_column='ID_SUPERVISOR', blank=True, null=True)
-    id_locacion = models.IntegerField(db_column='ID_LOCACION', blank=True, null=True)
+    id_locacion = models.ForeignKey(Locaciones,db_column='ID_LOCACION', on_delete=models.DO_NOTHING, blank=True, null=True)
 
 
     class Meta:
     # Unica forma de que django nos deje trabajar con la base de datos (Anderson) false ---> True
         managed = True
         db_table = 'DEPARTAMENTOS'
+
 
 class Empleados(models.Model):
     id_empleado = models.IntegerField(db_column='ID_EMPLEADO', primary_key=True)  # Field name made lowercase.

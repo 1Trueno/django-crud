@@ -3,8 +3,7 @@
 {%block title%} <title>Gestión de Departamento</title> {% endblock %}
 
 {% block navlink_content %}
-<nav id="simpleNavbar"
-    class="fixed top-0 left-0 w-full z-50 bg-white border-b-4 border-gray-700 transition-transform duration-500 ease-in-out transform translate-y-0">
+<nav id="simpleNavbar" class="fixed top-0 left-0 w-full z-50 bg-white border-b-4 border-gray-700 transition-transform duration-500 ease-in-out transform translate-y-0">
     <div class="max-w-full mx-auto flex">
         <a href="{% url 'home' %}"
             class="flex-1 text-center rounded-xs bg-blue-500 hover:bg-blue-400 text-white px-4 py-2">
@@ -19,7 +18,7 @@
 {% endblock %}
 
 {%block search %}
-<form method=" get" class="mb-6 flex flex-col items-center">
+<form method="get" class="mb-6 flex flex-col items-center">
     <!-- Input centrado y ancho completo en pantallas medianas o mayores -->
     <div class="w-full md:w-1/2">
         <input type="text" name="nombre_dep" value="{{ nombre_departamento }}" placeholder="Nombre del Departamento"
@@ -28,9 +27,11 @@
 
     <!-- Botones centrados debajo -->
     <div class="mt-4 text-center">
+
         <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded">
             <span class="shiny-text">Buscar</span>
         </button>
+        
         <button type="button" onclick="window.location.href='.'"
             class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded ml-2">
             <span class="shiny-text">Volver a cargar todos</span>
@@ -38,6 +39,7 @@
     </div>
 </form>
 {% endblock %}
+
 {% block departament %}
 
 <div class="flex justify-between items-center mb-6">
@@ -61,9 +63,9 @@
         <tbody>
             {% for departamento in departamentos %}
             <tr class="hover:bg-gray-100">
-                <td class="py-2 px-4">{{ departamento.nombre_departamento }}</td>
-                <td class="py-2 px-4">{{ departamento.id_supervisor }}</td>
-                <td class="py-2 px-4">{{ departamento.id_locacion }}</td>
+                <td class="py-2 px-4">{{ departamento.nombre_departamento|default:"N/A" }}</td>
+                <td class="py-2 px-4">{{ departamento.id_supervisor|default:"N/A" }}</td>
+                <td class="py-2 px-4">{{ departamento.id_locacion.id_locacion|default:"N/A" }}</td>
                 <td class="py-2 px-4 text-center space-x-2">
                     <button onclick="openModal('modal-update-{{ departamento.id_departamento }}')"
                         class="bg-yellow-400 hover:bg-yellow-500 text-white px-2 py-1 rounded">
@@ -80,25 +82,47 @@
             <div id="modal-update-{{ departamento.id_departamento }}"
                 class="fixed inset-0 bg-black bg-opacity-40 hidden justify-center items-center z-50">
                 <div class="bg-white p-6 rounded-lg w-full max-w-md">
-                    <h2 class="text-xl font-semibold mb-4">Editar Empleado</h2>
-                    <form action="{% url 'departamento_update' departamento.id_departamento %}" method="POST">
+                    <h2 class="text-xl font-semibold mb-4">Editar Departamento</h2>
+
+                    <form 
+                    action="{% url 'departamento_update' pk=departamento.id_departamento %}" 
+                    method="POST">
                         {% csrf_token %}
-                        <label class="block text-blue-400 text-sm mb-1">Precio KG (RD$):</label>
+                        <input
+                            type="hidden"
+                            name="id_departamento"
+                            value="{{ departamento.id_departamento }}"
+                        />
                         <input type="text" name="nombre_departamento" value="{{ departamento.nombre_departamento }}"
                             class="w-full border border-gray-300 rounded px-3 py-2 mb-2" required />
+
                         <select name="id_supervisor" class="w-full border border-gray-300 rounded px-3 py-2 mb-4">
-                            <option value="">{{ departamento.id_supervisor }}</option>
-                            {% for departamento in departamentos %}
-                            <option value="{{ departamento.id_departamento }}">{{ departamento.id_supervisor
-                                }}</option>
+                            <option value=""></option>
+
+                            {# Recorre la lista de IDs únicos de supervisores (ya filtrados en la vista) #}
+                            {% for id in supervisores_ids %}
+                                <option value="{{ id }}" 
+                                    {# Si el ID actual coincide con el del departamento que estamos editando, se marca como seleccionado #}
+                                    {% if departamento.id_supervisor == id %}selected{% endif %}>
+                                    {{ id }}
+                                </option>
                             {% endfor %}
                         </select>
 
+
                         <select name="id_locacion" class="w-full border border-gray-300 rounded px-3 py-2 mb-4">
-                            <option value="">{{ departamento.id_locacion }}</option>
-                            {% for departamento in departamentos %}
-                            <option value="{{ departamento.id_locacion }}">{{ departamento.id_locacion }}
-                            </option>
+
+                            {# Recorre la lista de objetos Locacion pasados desde la vista #}
+                            {% for locacion in locaciones %}
+
+                                {# Asegura que locacion.id_locacion existe antes de generar la opción (puede omitirse si el campo siempre es válido) #}
+                                {% if locacion.id_locacion %}
+                                    <option value="{{ locacion.id_locacion }}" 
+                                        {# Marca como seleccionada si el departamento tiene esta locación asignada #}
+                                        {% if departamento.id_locacion == locacion.id_locacion %}selected{% endif %}>
+                                        {{ locacion.id_locacion }}
+                                    </option>
+                                {% endif %}
                             {% endfor %}
                         </select>
 
@@ -108,7 +132,10 @@
                                 class="px-4 py-2 rounded bg-gray-300">
                                 Cancelar
                             </button>
-                            <button type="submit" class="px-4 py-2 rounded bg-blue-600 text-white">
+                            <button 
+                                type="submit" 
+                                class="px-4 py-2 rounded bg-blue-600 text-white"
+                            >
                                 Guardar
                             </button>
                         </div>
@@ -149,22 +176,47 @@
 <div id="modal-create" class="fixed inset-0 bg-black bg-opacity-40 hidden justify-center items-center z-50">
     <div class="bg-white p-6 rounded-lg w-full max-w-md">
         <h2 class="text-xl font-semibold mb-4">Crear nuevo Departamento</h2>
-        <form action="{% url 'departamento_create' %}" method="POST">
+        <form action="{% url 'crear_departamento' %}" id="form-crear-departamento" method="POST">
+            <!-- Aqui estan todos los inputst del formulario-->
             {% csrf_token %}
+            <input type="text" name="id_departamento" placeholder="ID Departamento"
+                class="w-full border border-gray-300 rounded px-3 py-2 mb-2" required />
+
             <input type="text" name="nombre_departamento" placeholder="Nombre del Departamento"
                 class="w-full border border-gray-300 rounded px-3 py-2 mb-2" required />
 
-            <select name="id_supervisor" class="w-full border border-gray-300 rounded px-3 py-2 mb-2"">
-                <option value="">{{ departamento.id_supervisor }}</option>
-                {% for departamento in departamentos %}
-                <option value=" {{ departamento.id_departamento }}">{{ departamento.id_supervisor }}</option>
+            <select name="id_supervisor" class="w-full border border-gray-300 rounded px-3 py-2 mb-4">
+                <option value="">Selecciona un ID Supervisor</option>
+
+                {# Recorremos una lista de IDs de supervisores únicos pasada desde la vista (supervisores_ids) #}
+                {% for id in supervisores_ids %}
+                    {# 
+                        Si el ID actual del bucle es igual al id_supervisor del departamento que se está editando, 
+                        marcamos la opción como 'selected' para que aparezca preseleccionada.
+                    #}
+                    <option value="{{ id }}" {% if departamento.id_supervisor == id %}selected{% endif %}>
+                        {{ id }}  {# Mostramos el valor del supervisor #}
+                    </option>
                 {% endfor %}
             </select>
 
-            <select name="id_locacion" class="w-full border border-gray-300 rounded px-3 py-2 mb-2">
-                <option value="">{{ departamento.id_locacion }}</option>
-                {% for departamento in departamentos %}
-                <option value="{{ departamento.id_locacion }}">{{ departamento.id_locacion }}</option>
+
+            <select name="id_locacion" class="w-full border border-gray-300 rounded px-3 py-2 mb-4" required>
+                <option value="">Selecciona un ID Locacion</option>
+
+                {# Recorremos la lista de objetos Locacion pasada desde la vista #}
+                {% for locacion in locaciones %}
+                    {% if locacion.id_locacion %}  {# Verificamos que tenga un ID válido (opcional si tus datos están bien) #}
+
+                        {# 
+                            Si el ID de la locación actual del bucle coincide con el ID de la locación asignada 
+                            al departamento que estamos editando, se marca como 'selected'.
+                        #}
+                        <option value="{{ locacion.id_locacion }}" 
+                                {% if departamento.id_locacion.id_locacion == locacion.id_locacion %}selected{% endif %}>
+                            {{ locacion.id_locacion }}  {# Mostramos el ID de la locación #}
+                        </option>
+                    {% endif %}
                 {% endfor %}
             </select>
             <div class="flex justify-end gap-2">
@@ -178,4 +230,5 @@
         </form>
     </div>
 </div>
+
 {% endblock %}
