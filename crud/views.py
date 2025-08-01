@@ -72,6 +72,24 @@ class EmpleadosDelete(DeleteView):
 #crear empleado
 def crear_empleado (request):
     if request.method == 'POST':
+        id_empleado = request.POST.get('id_empleado')
+        if Empleados.objects.filter(id_empleado=id_empleado).exists():
+            # Ya existe, muestra mensaje de error
+            nombre = request.POST.get('nombre', '')
+            apellido = request.POST.get('apellido', '')
+            salario = request.POST.get('salario', '')
+            email = request.POST.get('email', '')
+            puestos = Puestos.objects.all()
+            departamentos = Departamentos.objects.all()
+            empleados = Empleados.objects.select_related('id_puesto', 'id_departamento').all()
+            return render(request, 'home.html', {
+                'error_id': 'Ya existe un empleado con ese ID.',
+                'empleados': empleados,
+                'departamentos': departamentos,
+                'puestos': puestos,
+                'nombre': nombre,
+                'apellido': apellido,
+            })
         form = EmpleadosForm(request.POST)
         if form.is_valid():
             form.save()
@@ -79,6 +97,20 @@ def crear_empleado (request):
         else:
             print(form.errors)
     return redirect('home')
+
+def editar_empleado(request, id_empleado):
+    empleado = Empleados.objects.get(id_empleado=id_empleado)
+    if request.method == 'POST':
+        # Solo actualiza si el campo viene en el POST, si no, deja el valor actual
+        empleado.nombre = request.POST.get('nombre', empleado.nombre)
+        empleado.apellido = request.POST.get('apellido', empleado.apellido)
+        empleado.salario = request.POST.get('salario', empleado.salario)
+        empleado.email = request.POST.get('email', empleado.email)
+        empleado.id_puesto_id = request.POST.get('id_puesto', empleado.id_puesto_id)
+        empleado.id_departamento_id = request.POST.get('id_departamento', empleado.id_departamento_id)
+        empleado.save()
+        return redirect('home')
+    # ...renderiza el formulario si es GET...
 
 # __________ Fin del apartado de las funciones de Empleados __________
 
@@ -137,6 +169,25 @@ class DepartamentosDelete(DeleteView):
 #crear departamento
 def crear_departamento (request):
     if request.method == 'POST':
+        id_departamento = request.POST.get('id_departamento')
+        if Departamentos.objects.filter(id_departamento=id_departamento).exists():
+            # Ya existe, muestra mensaje de error
+            nombre = request.POST.get('nombre_departamento', '')
+            id_locacion = request.POST.get('id_locacion', '')
+            id_supervisor = request.POST.get('id_supervisor', '')
+            departamentos = Departamentos.objects.select_related('id_locacion').all()
+            locaciones = Locaciones.objects.all()
+            empleados = Empleados.objects.all()
+            return render(request, 'departamento.html', {
+                'error_id': 'Ya existe un departamento con ese ID.',
+                'departamentos': departamentos,
+                'locaciones': locaciones,
+                'empleados': empleados,
+                'nombre_dep': nombre,
+                'id_locacion': id_locacion,
+                'id_supervisor': id_supervisor,
+            })
+        # Si no existe, crea el departamento
         form = DepartamentosForm(request.POST)
         if form.is_valid():
             form.save()
