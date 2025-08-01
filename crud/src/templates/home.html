@@ -172,6 +172,7 @@
                   <select
                     name="id_puesto"
                     class="w-full border border-gray-300 rounded px-3 py-2 mb-4"
+                    required
                   >
                     <option value="">
                       {{ empleado.id_puesto.titulo_puesto }}
@@ -193,7 +194,8 @@
                       {{ empleado.id_departamento.nombre_departamento }}
                     </option>
                     {% for departamento in departamentos %}
-                    <option value="{{ departamento.id_departamento }}">
+                    <option value="{{ departamento.id_departamento }}" 
+                      {% if empleado.id_departamento.id_departamento == departamento.id_departamento %}selected{% endif %}>
                       {{ departamento.nombre_departamento }}
                     </option>
                     {% endfor %}

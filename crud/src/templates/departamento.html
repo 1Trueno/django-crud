@@ -96,7 +96,7 @@
                         <input type="text" name="nombre_departamento" value="{{ departamento.nombre_departamento }}"
                             class="w-full border border-gray-300 rounded px-3 py-2 mb-2" required />
 
-                        <select name="id_supervisor" class="w-full border border-gray-300 rounded px-3 py-2 mb-4">
+                        <select name="id_supervisor" class="w-full border border-gray-300 rounded px-3 py-2 mb-4" required>
                             <option value=""></option>
 
                             {# Recorre la lista de IDs únicos de supervisores (ya filtrados en la vista) #}
@@ -110,7 +110,7 @@
                         </select>
 
 
-                        <select name="id_locacion" class="w-full border border-gray-300 rounded px-3 py-2 mb-4">
+                        <select name="id_locacion" class="w-full border border-gray-300 rounded px-3 py-2 mb-4" required>
 
                             {# Recorre la lista de objetos Locacion pasados desde la vista #}
                             {% for locacion in locaciones %}
@@ -185,7 +185,7 @@
             <input type="text" name="nombre_departamento" placeholder="Nombre del Departamento"
                 class="w-full border border-gray-300 rounded px-3 py-2 mb-2" required />
 
-            <select name="id_supervisor" class="w-full border border-gray-300 rounded px-3 py-2 mb-4">
+            <select name="id_supervisor" class="w-full border border-gray-300 rounded px-3 py-2 mb-4" required>
                 <option value="">Selecciona un ID Supervisor</option>
 
                 {# Recorremos una lista de IDs de supervisores únicos pasada desde la vista (supervisores_ids) #}
